@@ -262,10 +262,10 @@ class CLI:
         else:
             print("Invalid input. Maintenance record ID must be a number.")
 
-def quit(self):
-    # Function to quit the program
-    print("Exiting program. Goodbye!")
-    sys.exit(0)
+    def quit(self):
+        # Function to quit the program
+        print("Exiting program. Goodbye!")
+        sys.exit(0)
 
 # Entry point of the program
 if __name__ == "__main__":
