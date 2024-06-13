@@ -1,10 +1,8 @@
 from database import CONN, CURSOR
 
 class Part:
-    all_parts = {}  
-
-    def __init__(self, name, machine_id, quantity=0):
-        self.id = None  
+    def __init__(self, name, machine_id, quantity=0, id=None):
+        self.id = id
         self.name = name
         self.machine_id = machine_id
         self.quantity = quantity
@@ -33,9 +31,9 @@ class Part:
     @classmethod
     def create(cls, name, machine_id, quantity=0):
         part = cls(name, machine_id, quantity)
-        part.save()  
-        return part  
-    
+        part.save()
+        return part
+
     def save(self):
         """Save the part instance to the database."""
         sql = """
@@ -45,9 +43,8 @@ class Part:
         CURSOR.execute(sql, (self.name, self.machine_id, self.quantity))
         CONN.commit()
         self.id = CURSOR.lastrowid
-        type(self).all_parts[self.id] = self  
+        type(self).all_parts[self.id] = self
 
-    
     def update(self, name=None, machine_id=None, quantity=None):
         """Update the part instance in the database."""
         if name:
@@ -72,22 +69,26 @@ class Part:
         """
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
-        del type(self).all_parts[self.id]  
+        del type(self).all_parts[self.id]
 
     @classmethod
     def get_all(cls):
         CURSOR.execute('SELECT * FROM parts')
         parts = CURSOR.fetchall()
-        return parts
+        return [cls(name=row[1], machine_id=row[2], quantity=row[3], id=row[0]) for row in parts]
 
     @classmethod
     def find_by_id(cls, part_id):
         CURSOR.execute('SELECT * FROM parts WHERE id = ?', (part_id,))
-        part = CURSOR.fetchone()
-        return part
+        part_data = CURSOR.fetchone()
+        if part_data:
+            return cls(part_data[1], part_data[2], part_data[3], id=part_data[0])
+        return None
+
 
     @classmethod
     def get_parts_by_machine(cls, machine_id):
         CURSOR.execute('SELECT * FROM parts WHERE machine_id = ?', (machine_id,))
         parts = CURSOR.fetchall()
-        return parts
+        return [cls(name=row[1], machine_id=row[2], quantity=row[3], id=row[0]) for row in parts]
+

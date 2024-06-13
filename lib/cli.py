@@ -124,7 +124,7 @@ class CLI:
                 print(f"No machine found with ID {machine_id}.")
         else:
             print("Invalid input. Machine ID must be a number.")
-
+            
     def parts_menu(self):
         # Menu for part operations
         while True:
@@ -188,11 +188,16 @@ class CLI:
             part_id = int(part_id)
             part = Part.find_by_id(part_id)
             if part:
-                print(part)
+                print("\nPart Details:")
+                print(f"ID: {part.id}")
+                print(f"Name: {part.name}")
+                print(f"Machine ID: {part.machine_id}")
+                print(f"Quantity: {part.quantity}")
             else:
                 print(f"No part found with ID {part_id}.")
         else:
             print("Invalid input. Part ID must be a number.")
+
 
     def maintenance_records_menu(self):
         # Menu for maintenance record operations

@@ -1,10 +1,10 @@
 from database import CONN, CURSOR
 
 class Machine:
-    all_machines = {}  
+    all_machines = {}
 
-    def __init__(self, name, type):
-        self.id = None  
+    def __init__(self, name, type, id=None):
+        self.id = id
         self.name = name
         self.type = type
 
@@ -78,8 +78,10 @@ class Machine:
     @classmethod
     def find_by_id(cls, machine_id):
         CURSOR.execute('SELECT * FROM machines WHERE id = ?', (machine_id,))
-        machine = CURSOR.fetchone()
-        return machine
+        machine_data = CURSOR.fetchone()
+        if machine_data:
+            return cls(machine_data['name'], machine_data['type'], id=machine_data['id'])
+        return None
 
     @classmethod
     def get_parts_by_machine(cls, machine_id):
