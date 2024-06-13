@@ -42,7 +42,33 @@ class Machine:
         CURSOR.execute(sql, (self.name, self.type))
         CONN.commit()
         self.id = CURSOR.lastrowid
+
+    def update(self, name=None, type=None):
+        """Update the machine instance in the database."""
+        if name:
+            self.name = name
+        if type:
+            self.type = type
+        sql = """
+            UPDATE machines
+            SET name = ?, type = ?
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.name, self.type, self.id))
+        CONN.commit()
+
+    def delete(self):
+        """Delete the machine instance from the database."""
+        # Delete associated parts
+        CURSOR.execute('DELETE FROM parts WHERE machine_id = ?', (self.id,))
         
+        # Delete associated maintenance records
+        CURSOR.execute('DELETE FROM maintenance_records WHERE machine_id = ?', (self.id,))
+        
+        # Delete the machine itself
+        CURSOR.execute('DELETE FROM machines WHERE id = ?', (self.id,))
+        CONN.commit()
+
     @classmethod
     def get_all(cls):
         CURSOR.execute('SELECT * FROM machines')

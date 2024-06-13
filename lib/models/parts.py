@@ -30,6 +30,12 @@ class Part:
         CURSOR.execute('DROP TABLE IF EXISTS parts')
         CONN.commit()
 
+    @classmethod
+    def create(cls, name, machine_id, quantity=0):
+        part = cls(name, machine_id, quantity)
+        part.save()  
+        return part  
+    
     def save(self):
         """Save the part instance to the database."""
         sql = """
@@ -41,11 +47,22 @@ class Part:
         self.id = CURSOR.lastrowid
         type(self).all_parts[self.id] = self  
 
-    @classmethod
-    def create(cls, name, machine_id, quantity=0):
-        part = cls(name, machine_id, quantity)
-        part.save()  
-        return part  
+    
+    def update(self, name=None, machine_id=None, quantity=None):
+        """Update the part instance in the database."""
+        if name:
+            self.name = name
+        if machine_id:
+            self.machine_id = machine_id
+        if quantity is not None:
+            self.quantity = quantity
+        sql = """
+            UPDATE parts
+            SET name = ?, machine_id = ?, quantity = ?
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.name, self.machine_id, self.quantity, self.id))
+        CONN.commit()
 
     def delete(self):
         """Delete the part instance from the database."""

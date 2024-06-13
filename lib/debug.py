@@ -13,7 +13,7 @@ if __name__ == "__main__":
     MaintenanceRecord.drop_table()
     MaintenanceRecord.create_table()
 
-  
+     # Defining data for machines
     machines_data = [
         {"name": "Lathe Machine", "type": "Heavy-duty"},
         {"name": "CNC Milling Machine", "type": "Computer Numerical Control"},
@@ -83,3 +83,32 @@ if __name__ == "__main__":
         records = MaintenanceRecord.get_records_by_machine(machine_id)
         record_descriptions = [record.description for record in records]
         print(f"The maintenance records for {machine_name} (ID: {machine_id}) are: {', '.join(record_descriptions)}")
+
+      # Updating a machine
+    machine = Machine.find_by_id(1)
+    if machine:
+        machine_instance = Machine(machine['name'], machine['type'])
+        machine_instance.id = machine['id']
+        machine_instance.update(name="New Lathe Machine")
+
+    # Updating a part
+    part = Part.find_by_id(1)
+    if part:
+        part_instance = Part(part['name'], part['machine_id'], part['quantity'])
+        part_instance.id = part['id']
+        part_instance.update(name="New Bolt", quantity=150)
+
+    # Updating a maintenance record
+    record = MaintenanceRecord.find_by_id(1)
+    if record:
+        record_instance = MaintenanceRecord(record['machine_id'], record['description'], record['performed_at'])
+        record_instance.id = record['id']
+        record_instance.update(description="New Oil Change", performed_at="2023-01-15")
+
+    # Delete functionality
+    machine_to_delete = Machine.find_by_id(1)  
+    if machine_to_delete:
+        machine_instance = Machine(machine_to_delete['name'], machine_to_delete['type'])
+        machine_instance.id = machine_to_delete['id']
+        machine_instance.delete()
+        print(f"Machine with ID 1 has been deleted.")
