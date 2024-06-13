@@ -79,13 +79,13 @@ class CLI:
                 machine_id = int(machine_id)
                 machine = Machine.find_by_id(machine_id)
                 if machine:
-                    Machine.delete(machine_id)
+                    Machine.delete(machine)  
                     print(f"Machine with ID {machine_id} deleted.")
                 else:
                     print(f"No machine found with ID {machine_id}.")
             else:
                 print("Invalid input. Machine ID must be a number.")
-
+    
     def display_all_machines(self):
         machines = Machine.get_all()
         print("\n*** All Machines ***")
@@ -169,7 +169,7 @@ class CLI:
             part_id = int(part_id)
             part = Part.find_by_id(part_id)
             if part:
-                Part.delete(part_id)
+                Part.delete(part)
                 print(f"Part with ID {part_id} deleted.")
             else:
                 print(f"No part found with ID {part_id}.")
@@ -236,18 +236,19 @@ class CLI:
         else:
             print("Invalid input. Machine ID must be a number, description and performed date/time are required.")
 
-    def delete_machine(self):
-        machine_id = input("Enter machine ID to delete: ").strip()
-        if machine_id.isdigit():
-            machine_id = int(machine_id)
-            machine = Machine.find_by_id(machine_id)
-            if machine:
-                Machine.delete(machine)  # Pass the machine instance
-                print(f"Machine with ID {machine_id} deleted.")
+    def delete_maintenance_record(self):
+        record_id = input("Enter maintenance record ID to delete: ").strip()
+        if record_id.isdigit():
+            record_id = int(record_id)
+            record = MaintenanceRecord.find_by_id(record_id)
+            if record:
+                record.delete()  
+                print(f"Maintenance record with ID {record_id} deleted.")
             else:
-                print(f"No machine found with ID {machine_id}.")
+                print(f"No maintenance record found with ID {record_id}.")
         else:
-            print("Invalid input. Machine ID must be a number.")
+            print("Invalid input. Maintenance record ID must be a number.")
+
 
     def display_all_maintenance_records(self):
         records = MaintenanceRecord.get_all()

@@ -37,7 +37,7 @@ class Part:
         return part
     
     def save(self):
-        """Save the part instance to the database."""
+        """Saves the part instance to the database."""
         sql = """
             INSERT INTO parts (name, machine_id, quantity)
             VALUES (?, ?, ?)
@@ -48,7 +48,7 @@ class Part:
         type(self).all_parts[self.id] = self
 
     def update(self, name=None, machine_id=None, quantity=None):
-        """Update the part instance in the database."""
+        """Updates the part instance in the database."""
         if name:
             self.name = name
         if machine_id:
@@ -64,16 +64,16 @@ class Part:
         CURSOR.execute(sql, (self.name, self.machine_id, self.quantity, self.id))
         CONN.commit()
 
-    def delete(self):
-        """Delete the part instance from the database."""
+    @classmethod
+    def delete(cls, part):
+        """Deletes the part instance from the database."""
         sql = """
             DELETE FROM parts
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.id,))
+        CURSOR.execute(sql, (part['id'],))
         CONN.commit()
-        del type(self).all_parts[self.id]
-
+       
     @classmethod
     def get_all(cls):
         CURSOR.execute('SELECT * FROM parts')
@@ -83,11 +83,14 @@ class Part:
     @classmethod
     def find_by_id(cls, part_id):
         CURSOR.execute('SELECT * FROM parts WHERE id = ?', (part_id,))
-        part_data = CURSOR.fetchone()
-        if part_data:
-            part_instance = cls(part_data['name'], part_data['machine_id'], part_data['quantity'])
-            part_instance.id = part_data['id']
-            return part_instance
+        row = CURSOR.fetchone()
+        if row:
+            return {
+                'id': row['id'],
+                'name': row['name'],
+                'machine_id': row['machine_id'],
+                'quantity': row['quantity']
+            }
         return None
 
     @classmethod

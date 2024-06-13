@@ -34,7 +34,7 @@ class Machine:
         return machine  
 
     def save(self):
-        """Save the machine instance to the database."""
+        """Saves the machine instance to the database."""
         sql = """
             INSERT INTO machines (name, type)
             VALUES (?, ?)
@@ -44,7 +44,7 @@ class Machine:
         self.id = CURSOR.lastrowid
 
     def update(self, name=None, type=None):
-        """Update the machine instance in the database."""
+        """Updates the machine instance in the database."""
         if name:
             self.name = name
         if type:
@@ -59,7 +59,7 @@ class Machine:
 
     @classmethod
     def delete(cls, machine):
-        """Delete the machine instance from the database."""
+        """Deletes the machine instance from the database."""
         sql = 'DELETE FROM machines WHERE id = ?'
         CURSOR.execute(sql, (machine['id'],))
         CONN.commit()
