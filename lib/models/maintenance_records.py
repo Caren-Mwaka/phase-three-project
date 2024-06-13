@@ -68,7 +68,7 @@ class MaintenanceRecord:
         if record:
             return cls(record["machine_id"], record["description"], record["performed_at"], id=record["id"])
         return None
-
+# class method for getting the records
     @classmethod
     def get_records_by_machine(cls, machine_id):
         CURSOR.execute('SELECT * FROM maintenance_records WHERE machine_id = ?', (machine_id,))
