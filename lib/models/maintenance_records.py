@@ -1,9 +1,10 @@
 from database import CONN, CURSOR
 
 class MaintenanceRecord:
+    all_maintenance_records = {}
 
     def __init__(self, machine_id, description, performed_at, id=None):
-        self.id = id
+        self.id = id  # Allow id to be set during initialization
         self.machine_id = machine_id
         self.description = description
         self.performed_at = performed_at
@@ -11,8 +12,8 @@ class MaintenanceRecord:
     def __repr__(self):
         return f"MaintenanceRecord(id={self.id}, machine_id={self.machine_id}, description={self.description}, performed_at={self.performed_at})"
 
-    @classmethod
-    def create_table(cls):
+    @staticmethod
+    def create_table():
         CURSOR.execute('''
         CREATE TABLE IF NOT EXISTS maintenance_records (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,8 +44,8 @@ class MaintenanceRecord:
     @classmethod
     def create(cls, machine_id, description, performed_at):
         record = cls(machine_id, description, performed_at)
-        record.save()
-        return record
+        record.save()  # Call save method to insert into the database
+        return record  # Return the created maintenance record instance
 
     def delete(self):
         sql = """
@@ -59,7 +60,7 @@ class MaintenanceRecord:
     def get_all(cls):
         CURSOR.execute('SELECT * FROM maintenance_records')
         records = CURSOR.fetchall()
-        return [cls(record["machine_id"], record["description"], record["performed_at"], id=record["id"]) for record in records]
+        return [cls.find_by_id(record["id"]) for record in records]
 
     @classmethod
     def find_by_id(cls, record_id):
@@ -68,9 +69,9 @@ class MaintenanceRecord:
         if record:
             return cls(record["machine_id"], record["description"], record["performed_at"], id=record["id"])
         return None
-# class method for getting the records
+
     @classmethod
     def get_records_by_machine(cls, machine_id):
         CURSOR.execute('SELECT * FROM maintenance_records WHERE machine_id = ?', (machine_id,))
         records = CURSOR.fetchall()
-        return [cls(record["machine_id"], record["description"], record["performed_at"], id=record["id"]) for record in records]
+        return [cls.find_by_id(record["id"]) for record in records]
