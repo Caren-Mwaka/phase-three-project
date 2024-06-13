@@ -4,7 +4,7 @@ from models import Machine, Part, MaintenanceRecord  # Importing models for data
 
 class CLI:
     def __init__(self):
-        # Defining the commands for different menu options
+        # Define commands for different menu options
         self.commands = {
             '1': self.machines_menu,
             '2': self.parts_menu,
@@ -13,20 +13,20 @@ class CLI:
         }
 
     def display_main_menu(self):
-            # Displaying the main menu options
-            print("\n*** Main Menu ***")
-            print("1. Machines Menu")
-            print("2. Parts Menu")
-            print("3. Maintenance Records Menu")
-            print("q. Quit")
+        # Displaying the main menu options
+        print("\n*** Main Menu ***")
+        print("1. Machines Menu")
+        print("2. Parts Menu")
+        print("3. Maintenance Records Menu")
+        print("q. Quit")
 
     def run(self):
         # Main loop to run the CLI
         while True:
             self.display_main_menu()  # Display the main menu
-            choice = input("Select an option: ").strip().lower()  # Getting user choice
+            choice = input("Select an option: ").strip().lower()  # Get user choice
             if choice in self.commands:
-                self.commands[choice]()  # Executing corresponding function for the choice
+                self.commands[choice]()  # Execute corresponding function for the choice
             else:
                 print("Invalid option. Please choose again.")
 
@@ -43,7 +43,7 @@ class CLI:
             print("b. Back to Main Menu")
             choice = input("Select an option: ").strip().lower()
             
-            # Executing corresponding function based on user choice
+            # Execute corresponding function based on user choice
             if choice == '1':
                 self.create_machine()
             elif choice == '2':
@@ -60,3 +60,94 @@ class CLI:
                 break
             else:
                 print("Invalid option. Please choose again.")
+
+  # methods to create a new machine(), delete_machine(), display_all_machines(),view_parts_of_machine(), view_maintenance_records_of_machine() and find_machine_by_id ()
+    def create_machine(self):
+      
+        name = input("Enter machine name: ").strip()
+        type = input("Enter machine type: ").strip()
+        if name and type:
+            Machine.create(name, type)  # Using the Machine model to create a new machine
+            print("Machine created successfully.")
+        else:
+            print("Invalid input. Both name and type are required.")
+    
+
+    def delete_machine(self):
+            machine_id = input("Enter machine ID to delete: ").strip()
+            if machine_id.isdigit():
+                machine_id = int(machine_id)
+                machine = Machine.find_by_id(machine_id)
+                if machine:
+                    Machine.delete(machine_id)
+                    print(f"Machine with ID {machine_id} deleted.")
+                else:
+                    print(f"No machine found with ID {machine_id}.")
+            else:
+                print("Invalid input. Machine ID must be a number.")
+
+    def display_all_machines(self):
+        machines = Machine.get_all()
+        print("\n*** All Machines ***")
+        for machine in machines:
+            print(f"Machine ID: {machine['id']}, Name: {machine['name']}, Type: {machine['type']}")
+
+    def view_parts_of_machine(self):
+        machine_id = input("Enter machine ID to view parts: ").strip()
+        if machine_id.isdigit():
+            machine_id = int(machine_id)
+            parts = Part.get_parts_by_machine(machine_id)
+            print(f"\n*** Parts of Machine ID {machine_id} ***")
+            for part in parts:
+                print(f"Part ID: {part['id']}, Name: {part['name']}, Quantity: {part['quantity']}")
+
+    def view_maintenance_records_of_machine(self):
+        machine_id = input("Enter machine ID to view maintenance records: ").strip()
+        if machine_id.isdigit():
+            machine_id = int(machine_id)
+            records = MaintenanceRecord.get_records_by_machine(machine_id)
+            print(f"\n*** Maintenance Records of Machine ID {machine_id} ***")
+            for record in records:
+                print(record)
+        else:
+            print("Invalid input. Machine ID must be a number.")
+
+
+    def find_machine_by_id(self):
+        machine_id = input("Enter machine ID to find: ").strip()
+        if machine_id.isdigit():
+            machine_id = int(machine_id)
+            machine = Machine.find_by_id(machine_id)
+            if machine:
+                print(machine)
+            else:
+                print(f"No machine found with ID {machine_id}.")
+        else:
+            print("Invalid input. Machine ID must be a number.")
+
+    def parts_menu(self):
+        # Menu for part operations
+        while True:
+            print("\n*** Parts Menu ***")
+            print("1. Create a Part")
+            print("2. Delete a Part")
+            print("3. Display all Parts")
+            print("4. Find a Part by ID")
+            print("b. Back to Main Menu")
+            choice = input("Select an option: ").strip().lower()
+            
+            # Executing corresponding function based on user choice
+            if choice == '1':
+                self.create_part()
+            elif choice == '2':
+                self.delete_part()
+            elif choice == '3':
+                self.display_all_parts()
+            elif choice == '4':
+                self.find_part_by_id()
+            elif choice == 'b':
+                break
+            else:
+                print("Invalid option. Please choose again.")
+
+    
