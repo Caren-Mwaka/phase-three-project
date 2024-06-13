@@ -84,25 +84,22 @@ if __name__ == "__main__":
         record_descriptions = [record.description for record in records]
         print(f"The maintenance records for {machine_name} (ID: {machine_id}) are: {', '.join(record_descriptions)}")
 
-      # Updating a machine
+    # Updating a machine
     machine = Machine.find_by_id(2)
     if machine:
-        machine_instance = Machine(machine['name'], machine['type'])
-        machine_instance.id = machine['id']
+        machine_instance = machine  
         machine_instance.update(name="New Lathe Machine")
 
     # Updating a part
     part = Part.find_by_id(1)
     if part:
-        part_instance = Part(part['name'], part['machine_id'], part['quantity'])
-        part_instance.id = part['id']
+        part_instance = part 
         part_instance.update(name="New Bolt", quantity=150)
 
     # Updating a maintenance record
     record = MaintenanceRecord.find_by_id(1)
     if record:
-        record_instance = MaintenanceRecord(record.machine_id, record.description, record.performed_at)
-        record_instance.id = record.id
+        record_instance = record  
         record_instance.update(description="New Oil Change", performed_at="2023-01-15")
 
 

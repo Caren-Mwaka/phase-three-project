@@ -1,8 +1,10 @@
 from database import CONN, CURSOR
 
 class Part:
-    def __init__(self, name, machine_id, quantity=0, id=None):
-        self.id = id
+    all_parts = {}
+
+    def __init__(self, name, machine_id, quantity=0):
+        self.id = None
         self.name = name
         self.machine_id = machine_id
         self.quantity = quantity
@@ -10,8 +12,8 @@ class Part:
     def __repr__(self):
         return f"Part(id={self.id}, name={self.name}, machine_id={self.machine_id}, quantity={self.quantity})"
 
-    @classmethod
-    def create_table(cls):
+    @staticmethod
+    def create_table():
         CURSOR.execute('''
         CREATE TABLE IF NOT EXISTS parts (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,7 +35,7 @@ class Part:
         part = cls(name, machine_id, quantity)
         part.save()
         return part
-
+    
     def save(self):
         """Save the part instance to the database."""
         sql = """
@@ -53,6 +55,7 @@ class Part:
             self.machine_id = machine_id
         if quantity is not None:
             self.quantity = quantity
+
         sql = """
             UPDATE parts
             SET name = ?, machine_id = ?, quantity = ?
@@ -75,20 +78,20 @@ class Part:
     def get_all(cls):
         CURSOR.execute('SELECT * FROM parts')
         parts = CURSOR.fetchall()
-        return [cls(name=row[1], machine_id=row[2], quantity=row[3], id=row[0]) for row in parts]
+        return parts
 
     @classmethod
     def find_by_id(cls, part_id):
         CURSOR.execute('SELECT * FROM parts WHERE id = ?', (part_id,))
         part_data = CURSOR.fetchone()
         if part_data:
-            return cls(part_data[1], part_data[2], part_data[3], id=part_data[0])
+            part_instance = cls(part_data['name'], part_data['machine_id'], part_data['quantity'])
+            part_instance.id = part_data['id']
+            return part_instance
         return None
-
 
     @classmethod
     def get_parts_by_machine(cls, machine_id):
         CURSOR.execute('SELECT * FROM parts WHERE machine_id = ?', (machine_id,))
         parts = CURSOR.fetchall()
-        return [cls(name=row[1], machine_id=row[2], quantity=row[3], id=row[0]) for row in parts]
-
+        return parts
