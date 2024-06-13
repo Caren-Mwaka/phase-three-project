@@ -54,3 +54,32 @@ if __name__ == "__main__":
         parts = Part.get_parts_by_machine(machine_id)
         part_names = [part[1] for part in parts]
         print(f"The parts used by {machine_name} (ID: {machine_id}) are: {', '.join(part_names)}")
+
+    # Defining data for maintenance records
+    maintenance_data = [
+        {"machine_id": 1, "description": "Oil Change", "performed_at": "2023-01-01"},
+        {"machine_id": 2, "description": "Calibration", "performed_at": "2023-02-01"},
+        {"machine_id": 3, "description": "Inspection", "performed_at": "2023-03-01"},
+        {"machine_id": 4, "description": "Belt Replacement", "performed_at": "2023-04-01"},
+        {"machine_id": 5, "description": "Hydraulic Fluid Check", "performed_at": "2023-05-01"},
+        {"machine_id": 6, "description": "Motor Check", "performed_at": "2023-06-01"},
+        {"machine_id": 1, "description": "Cleaning", "performed_at": "2023-07-01"},  
+        {"machine_id": 2, "description": "Lubrication", "performed_at": "2023-08-01"},  
+       
+    ]
+
+    # Creating maintenance record instances
+    for data in maintenance_data:
+        maintenance_record = MaintenanceRecord.create(
+            machine_id=data["machine_id"],
+            description=data["description"],
+            performed_at=data["performed_at"]
+        )
+
+    # Retrieving and printing maintenance records for each machine
+    for machine in Machine.get_all():
+        machine_id = machine[0]
+        machine_name = machine[1]
+        records = MaintenanceRecord.get_records_by_machine(machine_id)
+        record_descriptions = [record.description for record in records]
+        print(f"The maintenance records for {machine_name} (ID: {machine_id}) are: {', '.join(record_descriptions)}")
