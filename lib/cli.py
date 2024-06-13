@@ -261,3 +261,13 @@ class CLI:
                 print(f"No maintenance record found with ID {record_id}.")
         else:
             print("Invalid input. Maintenance record ID must be a number.")
+
+def quit(self):
+    # Function to quit the program
+    print("Exiting program. Goodbye!")
+    sys.exit(0)
+
+# Entry point of the program
+if __name__ == "__main__":
+    cli = CLI()  # Creating an instance of CLI
+    cli.run()  # Running the CLI
