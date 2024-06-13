@@ -11,8 +11,8 @@ class Part:
     def __repr__(self):
         return f"Part(id={self.id}, name={self.name}, machine_id={self.machine_id}, quantity={self.quantity})"
 
-    @staticmethod
-    def create_table():
+    @classmethod
+    def create_table(cls):
         CURSOR.execute('''
         CREATE TABLE IF NOT EXISTS parts (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
