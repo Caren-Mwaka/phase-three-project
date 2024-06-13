@@ -11,8 +11,8 @@ class MaintenanceRecord:
     def __repr__(self):
         return f"MaintenanceRecord(id={self.id}, machine_id={self.machine_id}, description={self.description}, performed_at={self.performed_at})"
 
-    @staticmethod
-    def create_table():
+    @classmethod
+    def create_table(cls):
         CURSOR.execute('''
         CREATE TABLE IF NOT EXISTS maintenance_records (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
