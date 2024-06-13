@@ -193,3 +193,30 @@ class CLI:
                 print(f"No part found with ID {part_id}.")
         else:
             print("Invalid input. Part ID must be a number.")
+
+    def maintenance_records_menu(self):
+        # Menu for maintenance record operations
+        while True:
+            print("\n*** Maintenance Records Menu ***")
+            print("1. Create a Maintenance Record")
+            print("2. Delete a Maintenance Record")
+            print("3. Display all Maintenance Records")
+            print("4. Find a Maintenance Record by ID")
+            print("b. Back to Main Menu")
+            choice = input("Select an option: ").strip().lower()
+            
+            # Execute corresponding function based on user choice
+            if choice == '1':
+                self.create_maintenance_record()
+            elif choice == '2':
+                self.delete_maintenance_record()
+            elif choice == '3':
+                self.display_all_maintenance_records()
+            elif choice == '4':
+                self.find_maintenance_record_by_id()
+            elif choice == 'b':
+                break
+            else:
+                print("Invalid option. Please choose again.")
+
+    # Methods for maintenance record operations (create_maintenance_record(), delete_maintenance_record(), display_all_maintenance_records(), find_maintenance_record_by_id())
