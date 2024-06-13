@@ -150,4 +150,46 @@ class CLI:
             else:
                 print("Invalid option. Please choose again.")
 
-    
+     # Methods for parts operations (create_part(), delete_part(), display_all_parts(), find_part_by_id())
+    def create_part(self):
+            name = input("Enter part name: ").strip()
+            machine_id = input("Enter associated machine ID: ").strip()
+            quantity = input("Enter quantity (default is 0): ").strip()
+            if name and machine_id.isdigit():
+                machine_id = int(machine_id)
+                quantity = int(quantity) if quantity.isdigit() else 0
+                Part.create(name, machine_id, quantity)
+                print("Part created successfully.")
+            else:
+                print("Invalid input. Name must not be empty and machine ID must be a number.")
+
+    def delete_part(self):
+        part_id = input("Enter part ID to delete: ").strip()
+        if part_id.isdigit():
+            part_id = int(part_id)
+            part = Part.find_by_id(part_id)
+            if part:
+                Part.delete(part_id)
+                print(f"Part with ID {part_id} deleted.")
+            else:
+                print(f"No part found with ID {part_id}.")
+        else:
+            print("Invalid input. Part ID must be a number.")
+
+    def display_all_parts(self):
+            parts = Part.get_all()
+            print("\n*** All Parts ***")
+            for part in parts:
+                print(f"Part ID: {part[0]}, Name: {part[1]}, Machine ID: {part[2]}, Quantity: {part[3]}")
+
+    def find_part_by_id(self):
+        part_id = input("Enter part ID to find: ").strip()
+        if part_id.isdigit():
+            part_id = int(part_id)
+            part = Part.find_by_id(part_id)
+            if part:
+                print(part)
+            else:
+                print(f"No part found with ID {part_id}.")
+        else:
+            print("Invalid input. Part ID must be a number.")
