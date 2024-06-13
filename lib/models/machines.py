@@ -57,16 +57,11 @@ class Machine:
         CURSOR.execute(sql, (self.name, self.type, self.id))
         CONN.commit()
 
-    def delete(self):
-        # """Delete the machine instance from the database."""
-        # # Delete associated parts
-        # CURSOR.execute('DELETE FROM parts WHERE machine_id = ?', (self.id,))
-        
-        # # Delete associated maintenance records
-        # CURSOR.execute('DELETE FROM maintenance_records WHERE machine_id = ?', (self.id,))
-        
-        # Delete the machine itself
-        CURSOR.execute('DELETE FROM machines WHERE id = ?', (self.id,))
+    @classmethod
+    def delete(cls, machine):
+        """Delete the machine instance from the database."""
+        sql = 'DELETE FROM machines WHERE id = ?'
+        CURSOR.execute(sql, (machine['id'],))
         CONN.commit()
 
     @classmethod
@@ -77,12 +72,17 @@ class Machine:
 
     @classmethod
     def find_by_id(cls, machine_id):
-        CURSOR.execute('SELECT * FROM machines WHERE id = ?', (machine_id,))
-        machine_data = CURSOR.fetchone()
-        if machine_data:
-            return cls(machine_data['name'], machine_data['type'], id=machine_data['id'])
+        sql = 'SELECT * FROM machines WHERE id = ?'
+        CURSOR.execute(sql, (machine_id,))
+        row = CURSOR.fetchone()
+        if row:
+            return {
+                'id': row['id'],
+                'name': row['name'],
+                'type': row['type']
+            }
         return None
-
+    
     @classmethod
     def get_parts_by_machine(cls, machine_id):
         CURSOR.execute('SELECT * FROM parts WHERE machine_id = ?', (machine_id,))
