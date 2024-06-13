@@ -220,3 +220,44 @@ class CLI:
                 print("Invalid option. Please choose again.")
 
     # Methods for maintenance record operations (create_maintenance_record(), delete_maintenance_record(), display_all_maintenance_records(), find_maintenance_record_by_id())
+    def create_maintenance_record(self):
+        machine_id = input("Enter machine ID: ").strip()
+        description = input("Enter maintenance description: ").strip()
+        performed_at = input("Enter performed date/time (YYYY-MM-DD HH:MM): ").strip()
+        if machine_id.isdigit() and description and performed_at:
+            machine_id = int(machine_id)
+            MaintenanceRecord.create(machine_id, description, performed_at)
+            print("Maintenance record created successfully.")
+        else:
+            print("Invalid input. Machine ID must be a number, description and performed date/time are required.")
+
+    def delete_maintenance_record(self):
+        record_id = input("Enter maintenance record ID to delete: ").strip()
+        if record_id.isdigit():
+            record_id = int(record_id)
+            record = MaintenanceRecord.find_by_id(record_id)
+            if record:
+                MaintenanceRecord.delete(record_id)
+                print(f"Maintenance record with ID {record_id} deleted.")
+            else:
+                print(f"No maintenance record found with ID {record_id}.")
+        else:
+            print("Invalid input. Maintenance record ID must be a number.")
+
+    def display_all_maintenance_records(self):
+        records = MaintenanceRecord.get_all()
+        print("\n*** All Maintenance Records ***")
+        for record in records:
+            print(record)
+
+    def find_maintenance_record_by_id(self):
+        record_id = input("Enter maintenance record ID to find: ").strip()
+        if record_id.isdigit():
+            record_id = int(record_id)
+            record = MaintenanceRecord.find_by_id(record_id)
+            if record:
+                print(record)
+            else:
+                print(f"No maintenance record found with ID {record_id}.")
+        else:
+            print("Invalid input. Maintenance record ID must be a number.")
