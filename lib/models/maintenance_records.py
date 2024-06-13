@@ -4,7 +4,7 @@ class MaintenanceRecord:
     all_maintenance_records = {}
 
     def __init__(self, machine_id, description, performed_at, id=None):
-        self.id = id  # Allow id to be set during initialization
+        self.id = id 
         self.machine_id = machine_id
         self.description = description
         self.performed_at = performed_at
