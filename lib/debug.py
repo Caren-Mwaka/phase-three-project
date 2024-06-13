@@ -85,7 +85,7 @@ if __name__ == "__main__":
         print(f"The maintenance records for {machine_name} (ID: {machine_id}) are: {', '.join(record_descriptions)}")
 
       # Updating a machine
-    machine = Machine.find_by_id(1)
+    machine = Machine.find_by_id(2)
     if machine:
         machine_instance = Machine(machine['name'], machine['type'])
         machine_instance.id = machine['id']
@@ -101,14 +101,15 @@ if __name__ == "__main__":
     # Updating a maintenance record
     record = MaintenanceRecord.find_by_id(1)
     if record:
-        record_instance = MaintenanceRecord(record['machine_id'], record['description'], record['performed_at'])
-        record_instance.id = record['id']
+        record_instance = MaintenanceRecord(record.machine_id, record.description, record.performed_at)
+        record_instance.id = record.id
         record_instance.update(description="New Oil Change", performed_at="2023-01-15")
 
-    # Delete functionality
-    machine_to_delete = Machine.find_by_id(1)  
-    if machine_to_delete:
-        machine_instance = Machine(machine_to_delete['name'], machine_to_delete['type'])
-        machine_instance.id = machine_to_delete['id']
-        machine_instance.delete()
-        print(f"Machine with ID 1 has been deleted.")
+
+    # # Delete functionality
+    # machine_to_delete = Machine.find_by_id(1)  
+    # if machine_to_delete:
+    #     machine_instance = Machine(machine_to_delete['name'], machine_to_delete['type'])
+    #     machine_instance.id = machine_to_delete['id']
+    #     machine_instance.delete()
+    #     print(f"Machine with ID 1 has been deleted.")

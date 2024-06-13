@@ -58,12 +58,12 @@ class Machine:
         CONN.commit()
 
     def delete(self):
-        """Delete the machine instance from the database."""
-        # Delete associated parts
-        CURSOR.execute('DELETE FROM parts WHERE machine_id = ?', (self.id,))
+        # """Delete the machine instance from the database."""
+        # # Delete associated parts
+        # CURSOR.execute('DELETE FROM parts WHERE machine_id = ?', (self.id,))
         
-        # Delete associated maintenance records
-        CURSOR.execute('DELETE FROM maintenance_records WHERE machine_id = ?', (self.id,))
+        # # Delete associated maintenance records
+        # CURSOR.execute('DELETE FROM maintenance_records WHERE machine_id = ?', (self.id,))
         
         # Delete the machine itself
         CURSOR.execute('DELETE FROM machines WHERE id = ?', (self.id,))
