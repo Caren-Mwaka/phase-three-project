@@ -28,3 +28,49 @@ class MaintenanceRecord:
     def drop_table(cls):
         CURSOR.execute('DROP TABLE IF EXISTS maintenance_records')
         CONN.commit()
+
+    def save(self):
+        """Save the maintenance record instance to the database."""
+        sql = """
+            INSERT INTO maintenance_records (machine_id, description, performed_at)
+            VALUES (?, ?, ?)
+        """
+        CURSOR.execute(sql, (self.machine_id, self.description, self.performed_at))
+        CONN.commit()
+        self.id = CURSOR.lastrowid
+        type(self).all_maintenance_records[self.id] = self
+
+    @classmethod
+    def create(cls, machine_id, description, performed_at):
+        record = cls(machine_id, description, performed_at)
+        record.save()
+        return record
+
+    def delete(self):
+        sql = """
+            DELETE FROM maintenance_records
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+        del type(self).all_maintenance_records[self.id]
+
+    @classmethod
+    def get_all(cls):
+        CURSOR.execute('SELECT * FROM maintenance_records')
+        records = CURSOR.fetchall()
+        return [cls(record["machine_id"], record["description"], record["performed_at"], id=record["id"]) for record in records]
+
+    @classmethod
+    def find_by_id(cls, record_id):
+        CURSOR.execute('SELECT * FROM maintenance_records WHERE id = ?', (record_id,))
+        record = CURSOR.fetchone()
+        if record:
+            return cls(record["machine_id"], record["description"], record["performed_at"], id=record["id"])
+        return None
+
+    @classmethod
+    def get_records_by_machine(cls, machine_id):
+        CURSOR.execute('SELECT * FROM maintenance_records WHERE machine_id = ?', (machine_id,))
+        records = CURSOR.fetchall()
+        return [cls(record["machine_id"], record["description"], record["performed_at"], id=record["id"]) for record in records]
