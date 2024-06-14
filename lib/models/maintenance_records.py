@@ -32,6 +32,12 @@ class MaintenanceRecord:
         CURSOR.execute('DROP TABLE IF EXISTS maintenance_records')
         CONN.commit()
 
+    @classmethod
+    def create(cls, machine_id, description, performed_at):
+        record = cls(machine_id, description, performed_at)
+        record.save()  
+        return record  
+
     def save(self):
         """Saves the maintenance record instance to the database."""
         sql = """
@@ -57,11 +63,6 @@ class MaintenanceRecord:
         CURSOR.execute(sql, (self.description, self.performed_at, self.id))
         CONN.commit()
 
-    @classmethod
-    def create(cls, machine_id, description, performed_at):
-        record = cls(machine_id, description, performed_at)
-        record.save()  
-        return record  
 
     def delete(self):
         """Deletes the maintenance record instance from the database."""

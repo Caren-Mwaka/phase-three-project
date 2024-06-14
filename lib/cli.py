@@ -3,7 +3,8 @@ from models import Machine, Part, MaintenanceRecord  # Importing models for data
 
 class CLI:
     def __init__(self):
-        # Define commands for different menu options
+        # Defines commands for different menu options
+        # dictionary mapping user input to corresponding methods.
         self.commands = {
             '1': self.machines_menu,
             '2': self.parts_menu,

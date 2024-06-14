@@ -103,10 +103,11 @@ if __name__ == "__main__":
         record_instance.update(description="New Oil Change", performed_at="2023-01-15")
 
 
-    # # Delete functionality
-    # machine_to_delete = Machine.find_by_id(1)  
-    # if machine_to_delete:
-    #     machine_instance = Machine(machine_to_delete['name'], machine_to_delete['type'])
-    #     machine_instance.id = machine_to_delete['id']
-    #     machine_instance.delete()
-    #     print(f"Machine with ID 1 has been deleted.")
+    # delete functionality
+    machine_to_delete = Machine.find_by_id(1)  
+    if machine_to_delete:
+        print(f"Attempting to delete machine: {machine_to_delete}")  
+        Machine.delete(machine_to_delete)
+        print(f"Machine with ID 1 has been deleted.")
+    else:
+        print("No machine found with ID 1.")
