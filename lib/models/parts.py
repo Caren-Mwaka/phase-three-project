@@ -79,17 +79,17 @@ class Part:
         CURSOR.execute('SELECT * FROM parts')
         parts = CURSOR.fetchall()
         return parts
-
+    
     @classmethod
     def find_by_id(cls, part_id):
         CURSOR.execute('SELECT * FROM parts WHERE id = ?', (part_id,))
         row = CURSOR.fetchone()
         if row:
             return {
-                'id': row['id'],
-                'name': row['name'],
-                'machine_id': row['machine_id'],
-                'quantity': row['quantity']
+                'id': row[0],
+                'name': row[1],
+                'machine_id': row[2],
+                'quantity': row[3]
             }
         return None
 

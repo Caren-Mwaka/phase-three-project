@@ -1,5 +1,4 @@
 import sys
-from database import CONN, CURSOR  # Importing database connection objects
 from models import Machine, Part, MaintenanceRecord  # Importing models for database interaction
 
 class CLI:
@@ -26,7 +25,7 @@ class CLI:
             self.display_main_menu()  # Display the main menu
             choice = input("Select an option: ").strip().lower()  # Get user choice
             if choice in self.commands:
-                self.commands[choice]()  # Execute corresponding function for the choice
+                self.commands[choice]()  # Executing corresponding function for the choice
             else:
                 print("Invalid option. Please choose again.")
 
@@ -183,21 +182,20 @@ class CLI:
                 print(f"Part ID: {part[0]}, Name: {part[1]}, Machine ID: {part[2]}, Quantity: {part[3]}")
 
     def find_part_by_id(self):
-        part_id = input("Enter part ID to find: ").strip()
-        if part_id.isdigit():
-            part_id = int(part_id)
-            part = Part.find_by_id(part_id)
-            if part:
-                print("\nPart Details:")
-                print(f"ID: {part.id}")
-                print(f"Name: {part.name}")
-                print(f"Machine ID: {part.machine_id}")
-                print(f"Quantity: {part.quantity}")
+            part_id = input("Enter part ID to find: ").strip()
+            if part_id.isdigit():
+                part_id = int(part_id)
+                part = Part.find_by_id(part_id)
+                if part:
+                    print("\nPart Details:")
+                    print(f"ID: {part['id']}")
+                    print(f"Name: {part['name']}")
+                    print(f"Machine ID: {part['machine_id']}")
+                    print(f"Quantity: {part['quantity']}")
+                else:
+                    print(f"No part found with ID {part_id}.")
             else:
-                print(f"No part found with ID {part_id}.")
-        else:
-            print("Invalid input. Part ID must be a number.")
-
+                print("Invalid input. Part ID must be a number.")
 
     def maintenance_records_menu(self):
         # Menu for maintenance record operations
