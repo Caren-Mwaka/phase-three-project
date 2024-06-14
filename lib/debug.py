@@ -85,29 +85,49 @@ if __name__ == "__main__":
         print(f"The maintenance records for {machine_name} (ID: {machine_id}) are: {', '.join(record_descriptions)}")
 
     # Updating a machine
-    machine = Machine.find_by_id(2)
-    if machine:
-        machine_instance = machine  
-        machine_instance.update(name="New Lathe Machine")
 
-    # Updating a part
-    part = Part.find_by_id(1)
-    if part:
-        part_instance = part 
-        part_instance.update(name="New Bolt", quantity=150)
-
-    # Updating a maintenance record
-    record = MaintenanceRecord.find_by_id(1)
-    if record:
-        record_instance = record  
-        record_instance.update(description="New Oil Change", performed_at="2023-01-15")
-
-
-    # delete functionality
-    machine_to_delete = Machine.find_by_id(1)  
-    if machine_to_delete:
-        print(f"Attempting to delete machine: {machine_to_delete}")  
-        Machine.delete(machine_to_delete)
-        print(f"Machine with ID 1 has been deleted.")
+    machine_data = Machine.find_by_id(2)
+    if machine_data:
+        machine_data['name'] = "New Lathe Machine"
+        Machine.update(machine_data)
+        print(f"Updated machine name to: {machine_data['name']}")
     else:
-        print("No machine found with ID 1.")
+        print("Machine with ID 2 not found.")
+    
+    # Updating a part
+    part_data = Part.find_by_id(1)
+    if part_data:
+        part_data['quantity'] = "150"
+        Part.update(part_data)
+        print(f"Updated part quantity to: {part_data['quantity']}")
+    else:
+        print("Part with ID 2 not found.")
+
+
+
+     # Fetching and printing all maintenance records
+    all_records = MaintenanceRecord.get_all()
+    print("\nAll Maintenance Records:")
+    for record in all_records:
+        print(record)
+
+    # Update an existing maintenance record 
+    if all_records:
+        record_to_update = all_records[0]
+        record_to_update.description = "Oil Change and Filter Replacement"
+        record_to_update.save()
+
+    # Fetching and printing all maintenance records after update
+    all_records_updated = MaintenanceRecord.get_all()
+    print("\nAll Maintenance Records after Update:")
+    for record in all_records_updated:
+        print(record)
+      
+    # delete functionality
+    # machine_to_delete = Machine.find_by_id(1)  
+    # if machine_to_delete:
+    #     print(f"Attempting to delete machine: {machine_to_delete}")  
+    #     Machine.delete(machine_to_delete)
+    #     print(f"Machine with ID 1 has been deleted.")
+    # else:
+    #     print("No machine found with ID 1.")

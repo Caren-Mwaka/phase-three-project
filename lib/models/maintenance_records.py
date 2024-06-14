@@ -49,21 +49,20 @@ class MaintenanceRecord:
         self.id = CURSOR.lastrowid
         type(self).all_maintenance_records[self.id] = self
 
-    def update(self, description=None, performed_at=None):
+
+    def update(self):
         """Updates the maintenance record instance in the database."""
-        if description:
-            self.description = description
-        if performed_at:
-            self.performed_at = performed_at
         sql = """
             UPDATE maintenance_records
-            SET description = ?, performed_at = ?
+            SET machine_id = ?,
+                description = ?,
+                performed_at = ?
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.description, self.performed_at, self.id))
+        CURSOR.execute(sql, (self.machine_id, self.description, self.performed_at, self.id))
         CONN.commit()
 
-
+    
     def delete(self):
         """Deletes the maintenance record instance from the database."""
         sql = """

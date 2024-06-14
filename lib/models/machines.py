@@ -43,19 +43,18 @@ class Machine:
         CONN.commit()
         self.id = CURSOR.lastrowid
 
-    def update(self, name=None, type=None):
+
+    @classmethod
+    def update(cls, machine_data):
         """Updates the machine instance in the database."""
-        if name:
-            self.name = name
-        if type:
-            self.type = type
         sql = """
             UPDATE machines
             SET name = ?, type = ?
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.name, self.type, self.id))
+        CURSOR.execute(sql, (machine_data['name'], machine_data['type'], machine_data['id']))
         CONN.commit()
+        print(f"Updated machine with ID {machine_data['id']}")
 
     @classmethod
     def delete(cls, machine):

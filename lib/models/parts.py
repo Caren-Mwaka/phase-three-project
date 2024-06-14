@@ -46,24 +46,8 @@ class Part:
         CONN.commit()
         self.id = CURSOR.lastrowid
         type(self).all_parts[self.id] = self
-
-    def update(self, name=None, machine_id=None, quantity=None):
-        """Updates the part instance in the database."""
-        if name:
-            self.name = name
-        if machine_id:
-            self.machine_id = machine_id
-        if quantity is not None:
-            self.quantity = quantity
-
-        sql = """
-            UPDATE parts
-            SET name = ?, machine_id = ?, quantity = ?
-            WHERE id = ?
-        """
-        CURSOR.execute(sql, (self.name, self.machine_id, self.quantity, self.id))
-        CONN.commit()
-
+    
+   
     @classmethod
     def delete(cls, part):
         """Deletes the part instance from the database."""
