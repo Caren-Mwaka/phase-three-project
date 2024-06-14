@@ -47,7 +47,18 @@ class Part:
         self.id = CURSOR.lastrowid
         type(self).all_parts[self.id] = self
     
-   
+    @classmethod
+    def update(cls, part_data ):
+        """Updates the part instance in the database."""
+
+        sql = """
+            UPDATE parts
+            SET name = ?, machine_id = ?, quantity = ?
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (part_data['name'], part_data['machine_id'], part_data['quantity'], part_data['id']))
+        CONN.commit()
+
     @classmethod
     def delete(cls, part):
         """Deletes the part instance from the database."""
